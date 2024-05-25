@@ -20,16 +20,17 @@ namespace FinalProject.Forms
             customTitleBar.BackColor = Color.FromArgb(255, 140, 0);
             customTitleBar.Location = new Point(0, 0);
             customTitleBar.Name = "customTitleBar";
-            customTitleBar.Size = new Size(800, 30);
+            customTitleBar.Size = new Size(this.ClientSize.Width, 30);
             customTitleBar.TabIndex = 0;
+            customTitleBar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right; // Ensure it resizes with the form
             // 
             // Home
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(customTitleBar);
             FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
+            Controls.Add(customTitleBar);
             Name = "Home";
             Padding = new Padding(0, 30, 0, 0);
             Text = "Home";
