@@ -1,6 +1,6 @@
 ﻿namespace FinalProject.Forms
 {
-    partial class Home
+    partial class Login
     {
         /// <summary>
         /// Required designer variable.
@@ -28,44 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
-            panel1 = new Panel();
             SuspendLayout();
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(414, 196);
-            label1.Name = "label1";
-            label1.Size = new Size(0, 15);
-            label1.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            panel1.BackColor = Color.White;
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(1096, 40);
-            panel1.TabIndex = 1;
-            // 
-            // Home
+            // Login
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1096, 621);
-            Controls.Add(panel1);
-            Controls.Add(label1);
+            ClientSize = new Size(967, 612);
+            ForeColor = SystemColors.ControlText;
             FormBorderStyle = FormBorderStyle.None;
-            Name = "Home";
-            Text = "Home";
+            Name = "Login";
+            Text = "Login";
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private Label label1;
-        private Panel panel1;
     }
 }

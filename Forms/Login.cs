@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace FinalProject.Forms
 {
-    public partial class Home : Form
+    public partial class Login : Form
     {
-        public Home()
+        public Login()
         {
             InitializeComponent();
         }
