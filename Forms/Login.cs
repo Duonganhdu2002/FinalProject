@@ -1,20 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using FinalProject.Controllers;
+using FinalProject.Models;
 
 namespace FinalProject.Forms
 {
     public partial class Login : Form
     {
+        private EmployeeController employeeController;
+
         public Login()
         {
             InitializeComponent();
+            employeeController = new EmployeeController();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string email = textBox1.Text;
+            string password = textBox2.Text;
+
+            Employee? employee = employeeController.ValidateUser(email, password);
+            if (employee != null)
+            {
+                MessageBox.Show("Login successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Home homeForm = new Home();
+                homeForm.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Invalid Email or Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
