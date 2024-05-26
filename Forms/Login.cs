@@ -23,7 +23,7 @@ namespace FinalProject.Forms
             Employee? employee = employeeController.ValidateUser(email, password);
             if (employee != null)
             {
-                Home homeForm = new Home(employee);
+                Home homeForm = new Home();
                 homeForm.Show();
                 this.Hide();
             }
