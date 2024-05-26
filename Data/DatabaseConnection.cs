@@ -2,14 +2,34 @@
 
 namespace FinalProject.Data
 {
-    public static class DatabaseConnection
+    public class DatabaseConnection
     {
-        private static readonly string connectionString = @"Data Source=Wydanhdu\SQLEXPRESS;Initial Catalog=POS;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;MultiSubnetFailover=False";
+        private SqlConnection connection;
 
-        public static SqlConnection GetConnection()
+        public DatabaseConnection()
         {
-            SqlConnection sqlConnection = new SqlConnection(connectionString);
-            return sqlConnection;
+            string connectionString = @"Data Source=Wydanhdu\SQLEXPRESS;Initial Catalog=POS;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;MultiSubnetFailover=False";
+            connection = new SqlConnection(connectionString);
+        }
+        public SqlConnection GetConnection()
+        {
+            return connection;
+        }
+
+        public void OpenConnection()
+        {
+            if (connection.State == System.Data.ConnectionState.Closed)
+            {
+                connection.Open();
+            }
+        }
+
+        public void CloseConnection()
+        {
+            if (connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close();
+            }
         }
     }
 }
