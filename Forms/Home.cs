@@ -16,5 +16,15 @@ namespace FinalProject.Forms
         {
             InitializeComponent();
         }
+
+        private void Home_Load(object sender, EventArgs e)
+        {
+
+        }
+        bool menuExpand = false;
+        private void menuTransiton_Tick(object sender, EventArgs e)
+        {
+
+        }
     }
 }
