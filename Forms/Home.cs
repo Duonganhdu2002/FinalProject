@@ -1,30 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using FinalProject.Models;
 
 namespace FinalProject.Forms
 {
     public partial class Home : Form
     {
-        public Home()
+        private Employee loggedInEmployee;
+
+        public Home(Employee employee)
         {
             InitializeComponent();
+            loggedInEmployee = employee;
+            DisplayEmployeeInfo();
         }
 
-        private void Home_Load(object sender, EventArgs e)
+        private void DisplayEmployeeInfo()
         {
-
-        }
-        bool menuExpand = false;
-        private void menuTransiton_Tick(object sender, EventArgs e)
-        {
-
+            // Hiển thị thông tin nhân viên đã đăng nhập
+            labelEmployeeName.Text = $"Welcome, {loggedInEmployee.FirstName} {loggedInEmployee.LastName}";
+            // Thêm các thông tin khác nếu cần
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using FinalProject.Controllers;
 using FinalProject.Models;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FinalProject.Forms
 {
@@ -24,7 +23,7 @@ namespace FinalProject.Forms
             Employee? employee = employeeController.ValidateUser(email, password);
             if (employee != null)
             {
-                Home homeForm = new Home();
+                Home homeForm = new Home(employee);
                 homeForm.Show();
                 this.Hide();
             }
