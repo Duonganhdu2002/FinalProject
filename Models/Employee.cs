@@ -10,5 +10,7 @@
         public string? Position { get; set; }
         public decimal Salary { get; set; }
         public string? Password { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }
