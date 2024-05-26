@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using FinalProject.Controllers;
 using FinalProject.Models;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FinalProject.Forms
 {
@@ -23,7 +24,6 @@ namespace FinalProject.Forms
             Employee? employee = employeeController.ValidateUser(email, password);
             if (employee != null)
             {
-                MessageBox.Show("Login successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Home homeForm = new Home();
                 homeForm.Show();
                 this.Hide();
