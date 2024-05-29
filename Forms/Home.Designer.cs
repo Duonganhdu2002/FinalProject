@@ -20,10 +20,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             labelEmployeeName = new Label();
             panel1 = new Panel();
-            panel7 = new Panel();
             button9 = new Button();
             panel5 = new Panel();
-            button8 = new Button();
             button4 = new Button();
             panel3 = new Panel();
             button2 = new Button();
@@ -41,8 +39,8 @@
             panel9 = new Panel();
             textBox1 = new TextBox();
             label1 = new Label();
+            panel7 = new Panel();
             panel1.SuspendLayout();
-            panel7.SuspendLayout();
             panel5.SuspendLayout();
             panel3.SuspendLayout();
             panel6.SuspendLayout();
@@ -51,6 +49,7 @@
             panel2.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             panel9.SuspendLayout();
+            panel7.SuspendLayout();
             SuspendLayout();
             // 
             // labelEmployeeName
@@ -72,26 +71,17 @@
             panel1.Controls.Add(panel8);
             panel1.Controls.Add(panel4);
             panel1.Controls.Add(panel2);
-            panel1.Location = new Point(-1, 43);
+            panel1.Location = new Point(-1, 56);
             panel1.Name = "panel1";
-            panel1.Size = new Size(70, 596);
+            panel1.Size = new Size(70, 583);
             panel1.TabIndex = 2;
-            // 
-            // panel7
-            // 
-            panel7.Controls.Add(button9);
-            panel7.Dock = DockStyle.Bottom;
-            panel7.Location = new Point(0, 526);
-            panel7.Name = "panel7";
-            panel7.Size = new Size(70, 70);
-            panel7.TabIndex = 7;
             // 
             // button9
             // 
             button9.Font = new Font("#9Slide03 Cabin", 8.999999F);
             button9.ForeColor = Color.DimGray;
             button9.Image = (Image)resources.GetObject("button9.Image");
-            button9.Location = new Point(-17, -15);
+            button9.Location = new Point(-16, -13);
             button9.Name = "button9";
             button9.Size = new Size(104, 83);
             button9.TabIndex = 6;
@@ -101,26 +91,12 @@
             // 
             // panel5
             // 
-            panel5.Controls.Add(button8);
             panel5.Controls.Add(button4);
             panel5.Dock = DockStyle.Top;
             panel5.Location = new Point(0, 350);
             panel5.Name = "panel5";
             panel5.Size = new Size(70, 70);
             panel5.TabIndex = 7;
-            // 
-            // button8
-            // 
-            button8.Font = new Font("#9Slide03 Cabin", 8.999999F);
-            button8.ForeColor = Color.DimGray;
-            button8.Image = (Image)resources.GetObject("button8.Image");
-            button8.Location = new Point(-17, -6);
-            button8.Name = "button8";
-            button8.Size = new Size(104, 83);
-            button8.TabIndex = 5;
-            button8.Text = "Settings";
-            button8.TextAlign = ContentAlignment.BottomCenter;
-            button8.UseVisualStyleBackColor = true;
             // 
             // button4
             // 
@@ -275,9 +251,9 @@
             // panelContent
             // 
             panelContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panelContent.Location = new Point(75, 43);
+            panelContent.Location = new Point(75, 56);
             panelContent.Name = "panelContent";
-            panelContent.Size = new Size(1030, 594);
+            panelContent.Size = new Size(1030, 581);
             panelContent.TabIndex = 6;
             // 
             // panel9
@@ -288,7 +264,7 @@
             panel9.Dock = DockStyle.Top;
             panel9.Location = new Point(0, 0);
             panel9.Name = "panel9";
-            panel9.Size = new Size(1105, 40);
+            panel9.Size = new Size(1105, 50);
             panel9.TabIndex = 7;
             panel9.Paint += panel9_Paint;
             // 
@@ -298,24 +274,34 @@
             textBox1.BackColor = Color.WhiteSmoke;
             textBox1.BorderStyle = BorderStyle.None;
             textBox1.ForeColor = Color.DimGray;
-            textBox1.Location = new Point(142, 8);
+            textBox1.Location = new Point(142, 13);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.PlaceholderText = "Search products...";
-            textBox1.Size = new Size(263, 25);
+            textBox1.Size = new Size(322, 25);
             textBox1.TabIndex = 0;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("#9Slide03 Cabin Bold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(9, 8);
+            label1.Location = new Point(9, 12);
             label1.Margin = new Padding(0);
             label1.Name = "label1";
             label1.Size = new Size(106, 25);
             label1.TabIndex = 1;
             label1.Text = "RESTRO POS";
             label1.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // panel7
+            // 
+            panel7.Controls.Add(button9);
+            panel7.Dock = DockStyle.Bottom;
+            panel7.Location = new Point(0, 513);
+            panel7.Name = "panel7";
+            panel7.Size = new Size(70, 70);
+            panel7.TabIndex = 7;
+            panel7.Paint += panel7_Paint;
             // 
             // Home
             // 
@@ -334,7 +320,6 @@
             WindowState = FormWindowState.Maximized;
             Load += Home_Load;
             panel1.ResumeLayout(false);
-            panel7.ResumeLayout(false);
             panel5.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel6.ResumeLayout(false);
@@ -344,6 +329,7 @@
             flowLayoutPanel2.ResumeLayout(false);
             panel9.ResumeLayout(false);
             panel9.PerformLayout();
+            panel7.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -363,11 +349,10 @@
         private Button button2;
         private Panel panel5;
         private Button button4;
-        private Button button8;
-        private Panel panel7;
         private Button button9;
         private Panel panel9;
         private TextBox textBox1;
         private Label label1;
+        private Panel panel7;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using FinalProject.Controllers;
 using FinalProject.Models;
@@ -11,12 +12,14 @@ namespace FinalProject.Components
     {
         private CategoryController categoryController;
         private ProductController productController;
+        private Dictionary<int, int> orderedProducts; // ProductID, Quantity
 
         public HomeContent()
         {
             InitializeComponent();
             categoryController = new CategoryController();
             productController = new ProductController();
+            orderedProducts = new Dictionary<int, int>();
             LoadCategories();
         }
 
@@ -76,7 +79,7 @@ namespace FinalProject.Components
                 {
                     Size = new Size(panelWidth, panelHeight),
                     Margin = new Padding(0, 5, 10, 5), // Add some spacing between panels
-                    BackColor = Color.White
+                    BackColor = Color.White // Use system default control color
                 };
 
                 PictureBox productPicture = new PictureBox
@@ -104,17 +107,115 @@ namespace FinalProject.Components
                 productPanel.Controls.Add(productPicture);
                 productPanel.Controls.Add(productName);
                 productPanel.Controls.Add(productPrice);
+                productPanel.Tag = product;
+                productPanel.Click += ProductPanel_Click;
 
                 panelProducts.Controls.Add(productPanel);
             }
         }
 
-        private void panel3_Paint(object sender, PaintEventArgs e)
+        private void ProductPanel_Click(object sender, EventArgs e)
         {
-
+            if (sender is Panel panel && panel.Tag is Product product)
+            {
+                AddProductToOrder(product);
+            }
         }
 
-        private void panel2_Paint(object sender, PaintEventArgs e)
+        private void AddProductToOrder(Product product)
+        {
+            if (orderedProducts.ContainsKey(product.ProductID))
+            {
+                orderedProducts[product.ProductID]++;
+            }
+            else
+            {
+                orderedProducts[product.ProductID] = 1;
+            }
+            RefreshOrderList();
+        }
+
+        private void RefreshOrderList()
+        {
+            orderListPanel.Controls.Clear();
+            var orderedProductsCopy = new Dictionary<int, int>(orderedProducts); // Create a copy of the dictionary
+            decimal total = 0;
+
+            foreach (var entry in orderedProductsCopy)
+            {
+                var product = productController.GetProductById(entry.Key);
+                int quantity = entry.Value;
+
+                if (product != null)
+                {
+                    Panel orderPanel = new Panel
+                    {
+                        Size = new Size(orderListPanel.Width, 50),
+                        Margin = new Padding(0, 5, 0, 5),
+                        BackColor = SystemColors.Control // Use system default control color
+                    };
+
+                    Label productQuantity = new Label
+                    {
+                        AutoSize = true,
+                        Location = new Point(10, 15),
+                        Text = quantity.ToString()
+                    };
+
+                    Label productName = new Label
+                    {
+                        AutoSize = true,
+                        Location = new Point(50, 15),
+                        Text = product.Name
+                    };
+
+                    Label productPrice = new Label
+                    {
+                        AutoSize = true,
+                        Location = new Point(orderPanel.Width - 130, 15),
+                        Text = $"Price: {(product.Price * quantity):C}"
+                    };
+
+                    total += product.Price * quantity;
+
+                    Button deleteButton = new Button
+                    {
+                        Size = new Size(25, 25),
+                        Location = new Point(orderPanel.Width - 30, 12),
+                        Text = "X",
+                        Tag = product
+                    };
+                    deleteButton.Click += DeleteButton_Click;
+
+                    orderPanel.Controls.Add(productQuantity);
+                    orderPanel.Controls.Add(productName);
+                    orderPanel.Controls.Add(productPrice);
+                    orderPanel.Controls.Add(deleteButton);
+
+                    orderListPanel.Controls.Add(orderPanel);
+                }
+            }
+
+            totalPrice.Text = $"Total: {total:C}";
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.Tag is Product product)
+            {
+                if (orderedProducts.ContainsKey(product.ProductID))
+                {
+                    orderedProducts[product.ProductID]--;
+                    if (orderedProducts[product.ProductID] <= 0)
+                    {
+                        orderedProducts.Remove(product.ProductID);
+                    }
+                }
+                RefreshOrderList();
+            }
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
         {
 
         }
