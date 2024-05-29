@@ -132,7 +132,7 @@
             // button1
             // 
             button1.BackColor = SystemColors.Control;
-            button1.Font = new Font("#9Slide03 Cabin Condensed", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button1.Font = new Font("#9Slide03 Cabin Condensed", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button1.Location = new Point(-11, -12);
             button1.Name = "button1";
             button1.Size = new Size(207, 61);
