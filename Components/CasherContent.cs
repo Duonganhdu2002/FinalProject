@@ -8,5 +8,10 @@ namespace FinalProject.Components
         {
             InitializeComponent();
         }
+
+        private void CasherContent_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

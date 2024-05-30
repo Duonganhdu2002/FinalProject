@@ -63,7 +63,7 @@
             // 
             totalPrice.AutoSize = true;
             totalPrice.BackColor = SystemColors.Control;
-            totalPrice.Location = new Point(80, 24);
+            totalPrice.Location = new Point(483, 24);
             totalPrice.Name = "totalPrice";
             totalPrice.Size = new Size(19, 15);
             totalPrice.TabIndex = 3;
@@ -95,7 +95,7 @@
             processBtn.TabIndex = 0;
             processBtn.Text = "Process";
             processBtn.UseVisualStyleBackColor = true;
-            processBtn.Click += processBtn_Click;
+            processBtn.Click += processBtn_Click_1;
             // 
             // orderListPanel
             // 

@@ -34,6 +34,7 @@
             // 
             Name = "CasherContent";
             Size = new Size(1017, 574);
+            Load += CasherContent_Load;
             ResumeLayout(false);
         }
 
