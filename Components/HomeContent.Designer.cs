@@ -12,9 +12,6 @@
             panel9 = new Panel();
             processBtn = new Button();
             orderListPanel = new FlowLayoutPanel();
-            panel4 = new Panel();
-            panel6 = new Panel();
-            button1 = new Button();
             panel7 = new Panel();
             numberOfProductOrdered = new Label();
             panel3 = new Panel();
@@ -27,15 +24,12 @@
             panel2.SuspendLayout();
             panel8.SuspendLayout();
             panel9.SuspendLayout();
-            panel4.SuspendLayout();
-            panel6.SuspendLayout();
             panel3.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.Controls.Add(panel2);
-            panel1.Controls.Add(panel4);
             panel1.Dock = DockStyle.Right;
             panel1.Location = new Point(568, 0);
             panel1.Name = "panel1";
@@ -44,13 +38,13 @@
             // 
             // panel2
             // 
-            panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel2.BackColor = Color.White;
             panel2.Controls.Add(panel8);
             panel2.Controls.Add(orderListPanel);
-            panel2.Location = new Point(0, 65);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(0, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(580, 551);
+            panel2.Size = new Size(580, 616);
             panel2.TabIndex = 5;
             // 
             // panel8
@@ -60,7 +54,7 @@
             panel8.Controls.Add(totalPrice);
             panel8.Controls.Add(label1);
             panel8.Controls.Add(panel9);
-            panel8.Location = new Point(13, 423);
+            panel8.Location = new Point(13, 488);
             panel8.Name = "panel8";
             panel8.Size = new Size(552, 117);
             panel8.TabIndex = 1;
@@ -71,9 +65,9 @@
             totalPrice.BackColor = SystemColors.Control;
             totalPrice.Location = new Point(80, 24);
             totalPrice.Name = "totalPrice";
-            totalPrice.Size = new Size(25, 15);
+            totalPrice.Size = new Size(19, 15);
             totalPrice.TabIndex = 3;
-            totalPrice.Text = "40$";
+            totalPrice.Text = "0$";
             // 
             // label1
             // 
@@ -101,6 +95,7 @@
             processBtn.TabIndex = 0;
             processBtn.Text = "Process";
             processBtn.UseVisualStyleBackColor = true;
+            processBtn.Click += processBtn_Click;
             // 
             // orderListPanel
             // 
@@ -108,37 +103,8 @@
             orderListPanel.AutoScroll = true;
             orderListPanel.Location = new Point(13, 14);
             orderListPanel.Name = "orderListPanel";
-            orderListPanel.Size = new Size(552, 394);
+            orderListPanel.Size = new Size(552, 459);
             orderListPanel.TabIndex = 0;
-            // 
-            // panel4
-            // 
-            panel4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            panel4.BackColor = Color.White;
-            panel4.Controls.Add(panel6);
-            panel4.Location = new Point(0, 0);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(580, 59);
-            panel4.TabIndex = 4;
-            // 
-            // panel6
-            // 
-            panel6.Controls.Add(button1);
-            panel6.Location = new Point(12, 11);
-            panel6.Name = "panel6";
-            panel6.Size = new Size(189, 37);
-            panel6.TabIndex = 0;
-            // 
-            // button1
-            // 
-            button1.BackColor = SystemColors.Control;
-            button1.Font = new Font("#9Slide03 Cabin Condensed", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button1.Location = new Point(-11, -12);
-            button1.Name = "button1";
-            button1.Size = new Size(207, 61);
-            button1.TabIndex = 1;
-            button1.Text = "Add customer";
-            button1.UseVisualStyleBackColor = false;
             // 
             // panel7
             // 
@@ -218,21 +184,16 @@
             panel8.ResumeLayout(false);
             panel8.PerformLayout();
             panel9.ResumeLayout(false);
-            panel4.ResumeLayout(false);
-            panel6.ResumeLayout(false);
             panel3.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         private Panel panel1;
         private Panel panel2;
-        private Panel panel4;
         private Panel panel3;
         private FlowLayoutPanel panel5; // Changed to FlowLayoutPanel
         private FlowLayoutPanel panelProducts; // Panel to display products
         private FlowLayoutPanel orderListPanel; // Panel to display order list
-        private Button button1;
-        private Panel panel6;
         private Panel panel7;
         private Label numberOfProductOrdered;
         private Button deleteOrderedProductFromOrderListBtn;

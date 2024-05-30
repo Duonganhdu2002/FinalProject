@@ -13,6 +13,7 @@ namespace FinalProject.Components
         private CategoryController categoryController;
         private ProductController productController;
         private Dictionary<int, int> orderedProducts; // ProductID, Quantity
+        private Panel billPanel;
 
         public HomeContent()
         {
@@ -214,6 +215,108 @@ namespace FinalProject.Components
                 RefreshOrderList();
             }
         }
+
+        private void processBtn_Click(object sender, EventArgs e)
+        {
+            CreateBillPanel();
+            panel2.Controls.Clear();
+            panel2.Controls.Add(billPanel);
+        }
+
+        private void CreateBillPanel()
+        {
+            billPanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.White
+            };
+
+            FlowLayoutPanel billDetailsPanel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                AutoScroll = true,
+                Size = new Size(billPanel.Width, 400),
+                WrapContents = false
+            };
+
+            decimal total = 0;
+            foreach (var entry in orderedProducts)
+            {
+                var product = productController.GetProductById(entry.Key);
+                int quantity = entry.Value;
+
+                if (product != null)
+                {
+                    Panel orderPanel = new Panel
+                    {
+                        Size = new Size(billDetailsPanel.Width - 25, 50),
+                        Margin = new Padding(0, 5, 0, 5),
+                        BackColor = SystemColors.Control // Use system default control color
+                    };
+
+                    Label productQuantity = new Label
+                    {
+                        AutoSize = true,
+                        Location = new Point(10, 15),
+                        Text = quantity.ToString()
+                    };
+
+                    Label productName = new Label
+                    {
+                        AutoSize = true,
+                        Location = new Point(50, 15),
+                        Text = product.Name
+                    };
+
+                    Label productPrice = new Label
+                    {
+                        AutoSize = true,
+                        Location = new Point(orderPanel.Width - 100, 15),
+                        Text = $"Price: {(product.Price * quantity):C}"
+                    };
+
+                    total += product.Price * quantity;
+
+                    orderPanel.Controls.Add(productQuantity);
+                    orderPanel.Controls.Add(productName);
+                    orderPanel.Controls.Add(productPrice);
+
+                    billDetailsPanel.Controls.Add(orderPanel);
+                }
+            }
+
+            Label totalLabel = new Label
+            {
+                AutoSize = true,
+                Location = new Point(10, billDetailsPanel.Bottom + 10),
+                Text = $"Total: {total:C}",
+                Font = new Font("Segoe UI", 12, FontStyle.Bold)
+            };
+
+            Button commitButton = new Button
+            {
+                Text = "Commit",
+                Size = new Size(100, 50),
+                Location = new Point(totalLabel.Right + 10, totalLabel.Top),
+                BackColor = Color.LightGreen
+            };
+            commitButton.Click += CommitButton_Click;
+
+            billPanel.Controls.Add(billDetailsPanel);
+            billPanel.Controls.Add(totalLabel);
+            billPanel.Controls.Add(commitButton);
+        }
+
+        private void CommitButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Order committed successfully!", "Order Confirmation");
+            orderedProducts.Clear();
+            RefreshOrderList();
+            panel2.Controls.Clear();
+            panel2.Controls.Add(orderListPanel);
+            panel2.Controls.Add(panel8);
+        }
+
 
         private void panel3_Paint(object sender, PaintEventArgs e)
         {

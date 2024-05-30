@@ -20,6 +20,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             labelEmployeeName = new Label();
             panel1 = new Panel();
+            panel7 = new Panel();
             button9 = new Button();
             panel5 = new Panel();
             button4 = new Button();
@@ -29,8 +30,6 @@
             button7 = new Button();
             panel8 = new Panel();
             button6 = new Button();
-            panel4 = new Panel();
-            button3 = new Button();
             panel2 = new Panel();
             button1 = new Button();
             button5 = new Button();
@@ -39,17 +38,15 @@
             panel9 = new Panel();
             textBox1 = new TextBox();
             label1 = new Label();
-            panel7 = new Panel();
             panel1.SuspendLayout();
+            panel7.SuspendLayout();
             panel5.SuspendLayout();
             panel3.SuspendLayout();
             panel6.SuspendLayout();
             panel8.SuspendLayout();
-            panel4.SuspendLayout();
             panel2.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             panel9.SuspendLayout();
-            panel7.SuspendLayout();
             SuspendLayout();
             // 
             // labelEmployeeName
@@ -69,19 +66,28 @@
             panel1.Controls.Add(panel3);
             panel1.Controls.Add(panel6);
             panel1.Controls.Add(panel8);
-            panel1.Controls.Add(panel4);
             panel1.Controls.Add(panel2);
             panel1.Location = new Point(-1, 56);
             panel1.Name = "panel1";
             panel1.Size = new Size(70, 583);
             panel1.TabIndex = 2;
             // 
+            // panel7
+            // 
+            panel7.Controls.Add(button9);
+            panel7.Dock = DockStyle.Bottom;
+            panel7.Location = new Point(0, 513);
+            panel7.Name = "panel7";
+            panel7.Size = new Size(70, 70);
+            panel7.TabIndex = 7;
+            panel7.Paint += panel7_Paint;
+            // 
             // button9
             // 
             button9.Font = new Font("#9Slide03 Cabin", 8.999999F);
             button9.ForeColor = Color.DimGray;
             button9.Image = (Image)resources.GetObject("button9.Image");
-            button9.Location = new Point(-16, -13);
+            button9.Location = new Point(-16, -14);
             button9.Name = "button9";
             button9.Size = new Size(104, 83);
             button9.TabIndex = 6;
@@ -93,7 +99,7 @@
             // 
             panel5.Controls.Add(button4);
             panel5.Dock = DockStyle.Top;
-            panel5.Location = new Point(0, 350);
+            panel5.Location = new Point(0, 280);
             panel5.Name = "panel5";
             panel5.Size = new Size(70, 70);
             panel5.TabIndex = 7;
@@ -116,7 +122,7 @@
             // 
             panel3.Controls.Add(button2);
             panel3.Dock = DockStyle.Top;
-            panel3.Location = new Point(0, 280);
+            panel3.Location = new Point(0, 210);
             panel3.Name = "panel3";
             panel3.Size = new Size(70, 70);
             panel3.TabIndex = 7;
@@ -139,7 +145,7 @@
             // 
             panel6.Controls.Add(button7);
             panel6.Dock = DockStyle.Top;
-            panel6.Location = new Point(0, 210);
+            panel6.Location = new Point(0, 140);
             panel6.Name = "panel6";
             panel6.Size = new Size(70, 70);
             panel6.TabIndex = 8;
@@ -162,7 +168,7 @@
             // 
             panel8.Controls.Add(button6);
             panel8.Dock = DockStyle.Top;
-            panel8.Location = new Point(0, 140);
+            panel8.Location = new Point(0, 70);
             panel8.Name = "panel8";
             panel8.Size = new Size(70, 70);
             panel8.TabIndex = 6;
@@ -180,29 +186,6 @@
             button6.TextAlign = ContentAlignment.BottomCenter;
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click_1;
-            // 
-            // panel4
-            // 
-            panel4.Controls.Add(button3);
-            panel4.Dock = DockStyle.Top;
-            panel4.Location = new Point(0, 70);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(70, 70);
-            panel4.TabIndex = 6;
-            // 
-            // button3
-            // 
-            button3.Font = new Font("#9Slide03 Cabin", 8.999999F);
-            button3.ForeColor = Color.DimGray;
-            button3.Image = (Image)resources.GetObject("button3.Image");
-            button3.Location = new Point(-16, -11);
-            button3.Name = "button3";
-            button3.Size = new Size(104, 83);
-            button3.TabIndex = 4;
-            button3.Text = "Customer";
-            button3.TextAlign = ContentAlignment.BottomCenter;
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click_1;
             // 
             // panel2
             // 
@@ -293,16 +276,6 @@
             label1.Text = "RESTRO POS";
             label1.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // panel7
-            // 
-            panel7.Controls.Add(button9);
-            panel7.Dock = DockStyle.Bottom;
-            panel7.Location = new Point(0, 513);
-            panel7.Name = "panel7";
-            panel7.Size = new Size(70, 70);
-            panel7.TabIndex = 7;
-            panel7.Paint += panel7_Paint;
-            // 
             // Home
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -320,23 +293,20 @@
             WindowState = FormWindowState.Maximized;
             Load += Home_Load;
             panel1.ResumeLayout(false);
+            panel7.ResumeLayout(false);
             panel5.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel6.ResumeLayout(false);
             panel8.ResumeLayout(false);
-            panel4.ResumeLayout(false);
             panel2.ResumeLayout(false);
             flowLayoutPanel2.ResumeLayout(false);
             panel9.ResumeLayout(false);
             panel9.PerformLayout();
-            panel7.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         private Panel panel1;
-        private Panel panel4;  
-        private Button button3;
         private Panel panel2;
         private Button button1;
         private Button button5;
