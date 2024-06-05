@@ -24,11 +24,7 @@ public partial class EmployeeForm : Form
         {
             FirstName = txtFirstName.Text,
             LastName = txtLastName.Text,
-            DateOfBirth = dtpDateOfBirth.Value,
-            Gender = cbGender.SelectedItem?.ToString() ?? string.Empty, // Sử dụng toán tử null-coalescing
-            PhoneNumber = txtPhoneNumber.Text,
             Email = txtEmail.Text,
-            HireDate = dtpHireDate.Value,
             Position = cbPosition.SelectedItem?.ToString() ?? string.Empty, // Sử dụng toán tử null-coalescing
             Salary = decimal.Parse(txtSalary.Text)
         };
