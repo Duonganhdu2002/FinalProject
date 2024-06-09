@@ -5,6 +5,7 @@
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Label labelEmployeeName;
         private System.Windows.Forms.Panel panelContent;
+        // private FinalProject.Components.Common.Search searchComponent; // Loại bỏ khai báo này
 
         protected override void Dispose(bool disposing)
         {
@@ -36,7 +37,7 @@
             flowLayoutPanel2 = new FlowLayoutPanel();
             panelContent = new Panel();
             panel9 = new Panel();
-            textBox1 = new TextBox();
+            // searchComponent = new FinalProject.Components.Common.Search(HomeContentSearch, "Search products..."); // Không khởi tạo ở đây
             label1 = new Label();
             panel1.SuspendLayout();
             panel7.SuspendLayout();
@@ -242,7 +243,7 @@
             // panel9
             // 
             panel9.BackColor = Color.White;
-            panel9.Controls.Add(textBox1);
+            // panel9.Controls.Add(searchComponent); // Không cần thêm searchComponent ở đây nữa
             panel9.Controls.Add(label1);
             panel9.Dock = DockStyle.Top;
             panel9.Location = new Point(0, 0);
@@ -250,19 +251,6 @@
             panel9.Size = new Size(1105, 50);
             panel9.TabIndex = 7;
             panel9.Paint += panel9_Paint;
-            // 
-            // textBox1
-            // 
-            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            textBox1.BackColor = Color.WhiteSmoke;
-            textBox1.BorderStyle = BorderStyle.None;
-            textBox1.ForeColor = Color.DimGray;
-            textBox1.Location = new Point(142, 13);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Search products...";
-            textBox1.Size = new Size(322, 25);
-            textBox1.TabIndex = 0;
             // 
             // label1
             // 
@@ -321,7 +309,6 @@
         private Button button4;
         private Button button9;
         private Panel panel9;
-        private TextBox textBox1;
         private Label label1;
         private Panel panel7;
     }
