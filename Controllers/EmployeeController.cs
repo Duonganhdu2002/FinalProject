@@ -164,7 +164,7 @@ namespace FinalProject.Controllers
         {
             using (SqlConnection connection = dbConnection.GetConnection())
             {
-                string query = "DELETE FROM Employees WHERE EmployeeID = @EmployeeID";
+                string query = "DELETE FROM Employee WHERE EmployeeID = @EmployeeID";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@EmployeeID", id);
                 dbConnection.OpenConnection();

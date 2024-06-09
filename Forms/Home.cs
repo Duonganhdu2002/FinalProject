@@ -100,14 +100,9 @@ namespace FinalProject.Forms
             ShowContent(homeContent);
         }
 
-        private void button3_Click_1(object sender, EventArgs e)
-        {
-            ShowContent(new CustomerContent());
-        }
-
         private void button6_Click_1(object sender, EventArgs e)
         {
-            ShowContent(new CasherContent());
+            ShowContent(new EmployeeContent());
         }
 
         private void button7_Click_1(object sender, EventArgs e)
@@ -126,10 +121,6 @@ namespace FinalProject.Forms
         }
 
         private void panel9_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
-        private void panelContent_Paint(object sender, PaintEventArgs e)
         {
         }
 
