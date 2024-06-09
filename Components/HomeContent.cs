@@ -21,6 +21,7 @@ namespace FinalProject.Components
             productController = new ProductController();
             orderedProducts = new Dictionary<int, int>();
             LoadCategories();
+            LoadProductsByCategory(-1); // Load all products by default
         }
 
         private void LoadCategories()
@@ -67,7 +68,16 @@ namespace FinalProject.Components
 
         private void LoadProductsByCategory(int categoryId)
         {
-            List<Product> products = productController.GetProductsByCategoryId(categoryId);
+            List<Product> products;
+            if (categoryId == -1)
+            {
+                products = productController.GetAllProducts(); // Load all products
+            }
+            else
+            {
+                products = productController.GetProductsByCategoryId(categoryId); // Load products by category
+            }
+
             int panelWidth = 163; // Width of the child panel for products
             int panelHeight = 252; // Height of the child panel for products
 
@@ -108,15 +118,35 @@ namespace FinalProject.Components
                 productPanel.Controls.Add(productName);
                 productPanel.Controls.Add(productPrice);
                 productPanel.Tag = product;
-                productPanel.Click += ProductPanel_Click;
+
+                RegisterClickEventForControl(productPanel, ProductPanel_Click);
 
                 panelProducts.Controls.Add(productPanel);
             }
         }
 
+        private void RegisterClickEventForControl(Control control, EventHandler eventHandler)
+        {
+            control.Click += eventHandler;
+            foreach (Control child in control.Controls)
+            {
+                RegisterClickEventForControl(child, eventHandler);
+            }
+        }
+
         private void ProductPanel_Click(object sender, EventArgs e)
         {
-            if (sender is Panel panel && panel.Tag is Product product)
+            Panel panel;
+            if (sender is Panel)
+            {
+                panel = (Panel)sender;
+            }
+            else
+            {
+                panel = ((Control)sender).Parent as Panel;
+            }
+
+            if (panel != null && panel.Tag is Product product)
             {
                 AddProductToOrder(product);
             }

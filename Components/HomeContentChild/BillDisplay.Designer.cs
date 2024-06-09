@@ -38,6 +38,7 @@
             button1.TabIndex = 0;
             button1.Text = "Commit";
             button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
             // 
             // panel1
             // 
@@ -105,7 +106,7 @@
 
         private Button button1;
         private Panel panel1;
-        private FlowLayoutPanel thisPanelDisplayProductDetail; // Changed to FlowLayoutPanel
+        private FlowLayoutPanel thisPanelDisplayProductDetail;
         private Panel panel3;
         private Label totalPriceOfBill;
         private Label label1;

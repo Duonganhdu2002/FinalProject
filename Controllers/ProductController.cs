@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using FinalProject.Data;
@@ -66,8 +67,25 @@ namespace FinalProject.Controllers
 
         public void AddProduct(Product product)
         {
+            using (SqlConnection connection = dbConnection.GetConnection())
+            {
+                string query = "INSERT INTO Product (Name, Description, Price, StockQuantity, ImagePath, CategoryID) " +
+                               "VALUES (@Name, @Description, @Price, @StockQuantity, @ImagePath, @CategoryID); " +
+                               "SELECT SCOPE_IDENTITY();";
+                SqlCommand cmd = new SqlCommand(query, connection);
+
+                cmd.Parameters.AddWithValue("@Name", product.Name);
+                cmd.Parameters.AddWithValue("@Description", product.Description);
+                cmd.Parameters.AddWithValue("@Price", product.Price);
+                cmd.Parameters.AddWithValue("@StockQuantity", product.StockQuantity);
+                cmd.Parameters.AddWithValue("@ImagePath", product.ImagePath);
+                cmd.Parameters.AddWithValue("@CategoryID", product.CategoryID);
+
+                dbConnection.OpenConnection();
+                product.ProductID = Convert.ToInt32(cmd.ExecuteScalar());
+                dbConnection.CloseConnection();
+            }
             products.Add(product);
-            // Optionally, you can add code to insert this new product into the database
         }
 
         public void UpdateProduct(Product product)
@@ -75,13 +93,33 @@ namespace FinalProject.Controllers
             var existingProduct = GetProductById(product.ProductID);
             if (existingProduct != null)
             {
+                using (SqlConnection connection = dbConnection.GetConnection())
+                {
+                    string query = "UPDATE Product SET Name = @Name, Description = @Description, Price = @Price, " +
+                                   "StockQuantity = @StockQuantity, ImagePath = @ImagePath, CategoryID = @CategoryID " +
+                                   "WHERE ProductID = @ProductID";
+                    SqlCommand cmd = new SqlCommand(query, connection);
+
+                    cmd.Parameters.AddWithValue("@Name", product.Name);
+                    cmd.Parameters.AddWithValue("@Description", product.Description);
+                    cmd.Parameters.AddWithValue("@Price", product.Price);
+                    cmd.Parameters.AddWithValue("@StockQuantity", product.StockQuantity);
+                    cmd.Parameters.AddWithValue("@ImagePath", product.ImagePath);
+                    cmd.Parameters.AddWithValue("@CategoryID", product.CategoryID);
+                    cmd.Parameters.AddWithValue("@ProductID", product.ProductID);
+
+                    dbConnection.OpenConnection();
+                    cmd.ExecuteNonQuery();
+                    dbConnection.CloseConnection();
+                }
+
+                // Update the in-memory list
                 existingProduct.Name = product.Name;
                 existingProduct.Description = product.Description;
                 existingProduct.Price = product.Price;
                 existingProduct.StockQuantity = product.StockQuantity;
                 existingProduct.ImagePath = product.ImagePath;
                 existingProduct.CategoryID = product.CategoryID;
-                // Optionally, you can add code to update this product in the database
             }
         }
 
@@ -90,8 +128,19 @@ namespace FinalProject.Controllers
             var product = GetProductById(id);
             if (product != null)
             {
+                using (SqlConnection connection = dbConnection.GetConnection())
+                {
+                    string query = "DELETE FROM Product WHERE ProductID = @ProductID";
+                    SqlCommand cmd = new SqlCommand(query, connection);
+
+                    cmd.Parameters.AddWithValue("@ProductID", id);
+
+                    dbConnection.OpenConnection();
+                    cmd.ExecuteNonQuery();
+                    dbConnection.CloseConnection();
+                }
+
                 products.Remove(product);
-                // Optionally, you can add code to delete this product from the database
             }
         }
     }

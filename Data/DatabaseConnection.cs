@@ -11,6 +11,7 @@ namespace FinalProject.Data
             string connectionString = @"Data Source=Wydanhdu\SQLEXPRESS;Initial Catalog=POS;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;MultiSubnetFailover=False";
             connection = new SqlConnection(connectionString);
         }
+
         public SqlConnection GetConnection()
         {
             return connection;
