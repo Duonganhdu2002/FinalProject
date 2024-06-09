@@ -5,11 +5,12 @@ namespace FinalProject.Data
     public class DatabaseConnection
     {
         private SqlConnection connection;
+        private string connectionString; // Define the connection string as a class-level variable
 
         public DatabaseConnection()
         {
-            string connectionString = @"Data Source=Wydanhdu\SQLEXPRESS;Initial Catalog=POS;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;MultiSubnetFailover=False";
-            connection = new SqlConnection(connectionString);
+            connectionString = @"Data Source=Wydanhdu\SQLEXPRESS;Initial Catalog=POS;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;MultiSubnetFailover=False";
+            connection = new SqlConnection(); // Initialize the connection without the connection string
         }
 
         public SqlConnection GetConnection()
@@ -21,6 +22,8 @@ namespace FinalProject.Data
         {
             if (connection.State == System.Data.ConnectionState.Closed)
             {
+                connection.ConnectionString = connectionString; // Set the connection string here
+                Console.WriteLine($"Connection String: {connection.ConnectionString}"); // Debug: Check if the connection string is set
                 connection.Open();
             }
         }

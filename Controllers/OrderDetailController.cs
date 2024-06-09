@@ -66,27 +66,25 @@ namespace FinalProject.Controllers
             return orderDetails.FirstOrDefault(od => od.OrderDetailID == id);
         }
 
-        public void AddOrderDetail(OrderDetail orderDetail)
+        public void AddOrderDetail(OrderDetail detail)
         {
             try
             {
                 using (SqlConnection connection = dbConnection.GetConnection())
                 {
-                    string query = "INSERT INTO [OrderDetail] (OrderID, ProductID, Quantity, UnitPrice) " +
-                                   "VALUES (@OrderID, @ProductID, @Quantity, @UnitPrice); " +
-                                   "SELECT SCOPE_IDENTITY();";
+                    string query = "INSERT INTO dbo.OrderDetail (OrderID, ProductID, Quantity, UnitPrice) " +
+                                   "VALUES (@OrderID, @ProductID, @Quantity, @UnitPrice)";
                     SqlCommand cmd = new SqlCommand(query, connection);
 
-                    cmd.Parameters.AddWithValue("@OrderID", orderDetail.OrderID);
-                    cmd.Parameters.AddWithValue("@ProductID", orderDetail.ProductID);
-                    cmd.Parameters.AddWithValue("@Quantity", orderDetail.Quantity);
-                    cmd.Parameters.AddWithValue("@UnitPrice", orderDetail.UnitPrice);
+                    cmd.Parameters.AddWithValue("@OrderID", detail.OrderID);
+                    cmd.Parameters.AddWithValue("@ProductID", detail.ProductID);
+                    cmd.Parameters.AddWithValue("@Quantity", detail.Quantity);
+                    cmd.Parameters.AddWithValue("@UnitPrice", detail.UnitPrice);
 
                     dbConnection.OpenConnection();
-                    orderDetail.OrderDetailID = Convert.ToInt32(cmd.ExecuteScalar());
+                    cmd.ExecuteNonQuery();
                     dbConnection.CloseConnection();
                 }
-                orderDetails.Add(orderDetail);
             }
             catch (Exception ex)
             {
@@ -94,6 +92,7 @@ namespace FinalProject.Controllers
                 throw;
             }
         }
+
 
         public void UpdateOrderDetail(OrderDetail orderDetail)
         {

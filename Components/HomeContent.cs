@@ -71,34 +71,67 @@ namespace FinalProject.Components
             List<Product> products;
             if (categoryId == -1)
             {
-                products = productController.GetAllProducts(); // Load all products
+                products = productController.GetAllProducts();
             }
             else
             {
-                products = productController.GetProductsByCategoryId(categoryId); // Load products by category
+                products = productController.GetProductsByCategoryId(categoryId);
             }
 
-            int panelWidth = 163; // Width of the child panel for products
-            int panelHeight = 252; // Height of the child panel for products
+            DisplayProducts(products);
+        }
 
-            panelProducts.Controls.Clear(); // Clear any existing buttons
+        public void SearchProducts(string searchText)
+        {
+            var products = productController.GetAllProducts()
+                .Where(p => p.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                .ToList();
+
+            DisplayProducts(products);
+        }
+
+        private void DisplayProducts(List<Product> products)
+        {
+            int panelWidth = 163;
+            int panelHeight = 252;
+
+            panelProducts.Controls.Clear();
 
             foreach (var product in products)
             {
                 Panel productPanel = new Panel
                 {
                     Size = new Size(panelWidth, panelHeight),
-                    Margin = new Padding(0, 5, 10, 5), // Add some spacing between panels
-                    BackColor = Color.White // Use system default control color
+                    Margin = new Padding(0, 5, 10, 5),
+                    BackColor = Color.White
                 };
 
                 PictureBox productPicture = new PictureBox
                 {
-                    Location = new Point(16, 14),
+                    Location = new Point(16, 20),
                     Size = new Size(130, 130),
-                    ImageLocation = product.ImagePath, // Assuming the image path is valid
-                    SizeMode = PictureBoxSizeMode.Zoom
+                    SizeMode = PictureBoxSizeMode.StretchImage
                 };
+
+                // Load image from resources
+                try
+                {
+                    string resourceName = System.IO.Path.GetFileNameWithoutExtension(product.ImagePath);
+                    var imageResource = Properties.Resources.ResourceManager.GetObject(resourceName) as Image;
+
+                    if (imageResource != null)
+                    {
+                        productPicture.Image = imageResource;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Image not found in resources: {resourceName}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading image from resources: {product.ImagePath}. Exception: {ex.Message}");
+                }
 
                 Label productName = new Label
                 {
