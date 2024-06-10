@@ -23,8 +23,6 @@
             panel1 = new Panel();
             panel7 = new Panel();
             button9 = new Button();
-            panel5 = new Panel();
-            button4 = new Button();
             panel3 = new Panel();
             button2 = new Button();
             panel6 = new Panel();
@@ -37,11 +35,9 @@
             flowLayoutPanel2 = new FlowLayoutPanel();
             panelContent = new Panel();
             panel9 = new Panel();
-            // searchComponent = new FinalProject.Components.Common.Search(HomeContentSearch, "Search products..."); // Không khởi tạo ở đây
             label1 = new Label();
             panel1.SuspendLayout();
             panel7.SuspendLayout();
-            panel5.SuspendLayout();
             panel3.SuspendLayout();
             panel6.SuspendLayout();
             panel8.SuspendLayout();
@@ -63,7 +59,6 @@
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panel1.BackColor = Color.White;
             panel1.Controls.Add(panel7);
-            panel1.Controls.Add(panel5);
             panel1.Controls.Add(panel3);
             panel1.Controls.Add(panel6);
             panel1.Controls.Add(panel8);
@@ -95,29 +90,6 @@
             button9.Text = "Log out";
             button9.TextAlign = ContentAlignment.BottomCenter;
             button9.UseVisualStyleBackColor = true;
-            // 
-            // panel5
-            // 
-            panel5.Controls.Add(button4);
-            panel5.Dock = DockStyle.Top;
-            panel5.Location = new Point(0, 280);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(70, 70);
-            panel5.TabIndex = 7;
-            // 
-            // button4
-            // 
-            button4.Font = new Font("#9Slide03 Cabin", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button4.ForeColor = Color.DimGray;
-            button4.Image = (Image)resources.GetObject("button4.Image");
-            button4.Location = new Point(-16, -11);
-            button4.Name = "button4";
-            button4.Size = new Size(104, 83);
-            button4.TabIndex = 4;
-            button4.Text = "Settings";
-            button4.TextAlign = ContentAlignment.BottomCenter;
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click_1;
             // 
             // panel3
             // 
@@ -243,7 +215,6 @@
             // panel9
             // 
             panel9.BackColor = Color.White;
-            // panel9.Controls.Add(searchComponent); // Không cần thêm searchComponent ở đây nữa
             panel9.Controls.Add(label1);
             panel9.Dock = DockStyle.Top;
             panel9.Location = new Point(0, 0);
@@ -282,7 +253,6 @@
             Load += Home_Load;
             panel1.ResumeLayout(false);
             panel7.ResumeLayout(false);
-            panel5.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel6.ResumeLayout(false);
             panel8.ResumeLayout(false);
@@ -305,8 +275,6 @@
         private Button button6;
         private Panel panel3;
         private Button button2;
-        private Panel panel5;
-        private Button button4;
         private Button button9;
         private Panel panel9;
         private Label label1;

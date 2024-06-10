@@ -109,6 +109,12 @@ namespace FinalProject.Components
         private void LoadEmployees()
         {
             List<Employee> employees = employeeController.GetAllEmployee();
+            DisplayEmployees(employees);
+        }
+
+        private void DisplayEmployees(List<Employee> employees)
+        {
+            dataGridViewEmployees.DataSource = null; // Clear the existing data binding
             dataGridViewEmployees.DataSource = employees;
         }
 
@@ -190,6 +196,12 @@ namespace FinalProject.Components
             }
             textBoxSalary.Text = string.Empty;
             textBoxPassword.Text = string.Empty;
+        }
+
+        public void SearchEmployees(string searchText)
+        {
+            var employees = employeeController.SearchEmployees(searchText);
+            DisplayEmployees(employees);
         }
     }
 }

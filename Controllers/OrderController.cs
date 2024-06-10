@@ -143,14 +143,39 @@ namespace FinalProject.Controllers
                 {
                     using (SqlConnection connection = dbConnection.GetConnection())
                     {
-                        string query = "DELETE FROM [Order] WHERE OrderID = @OrderID";
-                        SqlCommand cmd = new SqlCommand(query, connection);
+                        dbConnection.OpenConnection(); // Mở kết nối
 
-                        cmd.Parameters.AddWithValue("@OrderID", id);
+                        // Bắt đầu transaction
+                        SqlTransaction transaction = connection.BeginTransaction();
 
-                        dbConnection.OpenConnection();
-                        cmd.ExecuteNonQuery();
-                        dbConnection.CloseConnection();
+                        try
+                        {
+                            // Xóa các chi tiết đơn hàng liên quan trước
+                            string deleteOrderDetailsQuery = "DELETE FROM OrderDetail WHERE OrderID = @OrderID";
+                            SqlCommand deleteOrderDetailsCmd = new SqlCommand(deleteOrderDetailsQuery, connection, transaction);
+                            deleteOrderDetailsCmd.Parameters.AddWithValue("@OrderID", id);
+                            deleteOrderDetailsCmd.ExecuteNonQuery();
+
+                            // Xóa đơn hàng
+                            string deleteOrderQuery = "DELETE FROM [Order] WHERE OrderID = @OrderID";
+                            SqlCommand deleteOrderCmd = new SqlCommand(deleteOrderQuery, connection, transaction);
+                            deleteOrderCmd.Parameters.AddWithValue("@OrderID", id);
+                            deleteOrderCmd.ExecuteNonQuery();
+
+                            // Commit transaction
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            // Rollback transaction trong trường hợp xảy ra lỗi
+                            transaction.Rollback();
+                            Console.WriteLine($"Error deleting order: {ex.Message}");
+                            throw;
+                        }
+                        finally
+                        {
+                            dbConnection.CloseConnection(); // Đóng kết nối
+                        }
                     }
 
                     orders.Remove(order);
@@ -162,5 +187,160 @@ namespace FinalProject.Controllers
                 }
             }
         }
+
+
+        public List<Order> SearchOrders(string searchText)
+        {
+            if (string.IsNullOrEmpty(searchText))
+            {
+                return orders;
+            }
+
+            int idSearch;
+            bool isNumeric = int.TryParse(searchText, out idSearch);
+
+            if (isNumeric)
+            {
+                return orders.Where(o => o.OrderID == idSearch || o.CustomerID == idSearch || o.EmployeeID == idSearch).ToList();
+            }
+            else
+            {
+                return new List<Order>();
+            }
+        }
+
+        public decimal GetTotalRevenue()
+        {
+            decimal totalRevenue = 0;
+
+            using (SqlConnection connection = dbConnection.GetConnection())
+            {
+                string query = "SELECT SUM(TotalAmount) FROM [Order]";
+                SqlCommand command = new SqlCommand(query, connection);
+                dbConnection.OpenConnection();
+
+                totalRevenue = (decimal)command.ExecuteScalar();
+
+                dbConnection.CloseConnection();
+            }
+
+            return totalRevenue;
+        }
+
+        public int GetTotalOrders()
+        {
+            int totalOrders = 0;
+
+            using (SqlConnection connection = dbConnection.GetConnection())
+            {
+                string query = "SELECT COUNT(*) FROM [Order]";
+                SqlCommand command = new SqlCommand(query, connection);
+                dbConnection.OpenConnection();
+
+                totalOrders = (int)command.ExecuteScalar();
+
+                dbConnection.CloseConnection();
+            }
+
+            return totalOrders;
+        }
+
+        public List<(DateTime Date, decimal Revenue)> GetDailyRevenue()
+        {
+            List<(DateTime Date, decimal Revenue)> dailyRevenue = new List<(DateTime Date, decimal Revenue)>();
+
+            using (SqlConnection connection = dbConnection.GetConnection())
+            {
+                string query = "SELECT OrderDate, SUM(TotalAmount) AS Revenue FROM [Order] GROUP BY OrderDate";
+                SqlCommand command = new SqlCommand(query, connection);
+                dbConnection.OpenConnection();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        dailyRevenue.Add((reader.GetDateTime(0), reader.GetDecimal(1)));
+                    }
+                }
+
+                dbConnection.CloseConnection();
+            }
+
+            return dailyRevenue;
+        }
+
+        public List<(int Month, int Year, decimal Revenue)> GetMonthlyRevenue()
+        {
+            List<(int Month, int Year, decimal Revenue)> monthlyRevenue = new List<(int Month, int Year, decimal Revenue)>();
+
+            using (SqlConnection connection = dbConnection.GetConnection())
+            {
+                string query = "SELECT MONTH(OrderDate) AS Month, YEAR(OrderDate) AS Year, SUM(TotalAmount) AS Revenue FROM [Order] GROUP BY MONTH(OrderDate), YEAR(OrderDate)";
+                SqlCommand command = new SqlCommand(query, connection);
+                dbConnection.OpenConnection();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        monthlyRevenue.Add((reader.GetInt32(0), reader.GetInt32(1), reader.GetDecimal(2)));
+                    }
+                }
+
+                dbConnection.CloseConnection();
+            }
+
+            return monthlyRevenue;
+        }
+
+        public List<(DateTime Date, int OrderCount)> GetDailyOrderCount()
+        {
+            List<(DateTime Date, int OrderCount)> dailyOrderCount = new List<(DateTime Date, int OrderCount)>();
+
+            using (SqlConnection connection = dbConnection.GetConnection())
+            {
+                string query = "SELECT OrderDate, COUNT(*) AS OrderCount FROM [Order] GROUP BY OrderDate";
+                SqlCommand command = new SqlCommand(query, connection);
+                dbConnection.OpenConnection();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        dailyOrderCount.Add((reader.GetDateTime(0), reader.GetInt32(1)));
+                    }
+                }
+
+                dbConnection.CloseConnection();
+            }
+
+            return dailyOrderCount;
+        }
+
+        public List<(int Month, int Year, int OrderCount)> GetMonthlyOrderCount()
+        {
+            List<(int Month, int Year, int OrderCount)> monthlyOrderCount = new List<(int Month, int Year, int OrderCount)>();
+
+            using (SqlConnection connection = dbConnection.GetConnection())
+            {
+                string query = "SELECT MONTH(OrderDate) AS Month, YEAR(OrderDate) AS Year, COUNT(*) AS OrderCount FROM [Order] GROUP BY MONTH(OrderDate), YEAR(OrderDate)";
+                SqlCommand command = new SqlCommand(query, connection);
+                dbConnection.OpenConnection();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        monthlyOrderCount.Add((reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2)));
+                    }
+                }
+
+                dbConnection.CloseConnection();
+            }
+
+            return monthlyOrderCount;
+        }
+
+
     }
 }

@@ -172,5 +172,41 @@ namespace FinalProject.Controllers
                 dbConnection.CloseConnection();
             }
         }
+
+        public List<Employee> SearchEmployees(string searchText)
+        {
+            List<Employee> employees = new List<Employee>();
+
+            using (SqlConnection connection = dbConnection.GetConnection())
+            {
+                string query = "SELECT * FROM Employee WHERE FirstName LIKE @SearchText OR LastName LIKE @SearchText";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@SearchText", "%" + searchText + "%");
+                dbConnection.OpenConnection();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Employee employee = new Employee
+                        {
+                            EmployeeID = reader.GetInt32(0),
+                            FirstName = reader.GetString(1),
+                            LastName = reader.GetString(2),
+                            Email = reader.GetString(3),
+                            Phone = reader.IsDBNull(4) ? null : reader.GetString(4),
+                            Position = reader.IsDBNull(5) ? null : reader.GetString(5),
+                            Salary = reader.GetDecimal(6),
+                            Password = reader.GetString(7)
+                        };
+                        employees.Add(employee);
+                    }
+                }
+
+                dbConnection.CloseConnection();
+            }
+
+            return employees;
+        }
     }
 }

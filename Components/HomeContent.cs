@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using FinalProject.Controllers;
@@ -13,13 +12,15 @@ namespace FinalProject.Components
         private CategoryController categoryController;
         private ProductController productController;
         private Dictionary<int, int> orderedProducts; // ProductID, Quantity
+        private OrderContent orderContent; // Reference to OrderContent
 
-        public HomeContent()
+        public HomeContent(OrderContent orderContent)
         {
             InitializeComponent();
             categoryController = new CategoryController();
             productController = new ProductController();
             orderedProducts = new Dictionary<int, int>();
+            this.orderContent = orderContent; // Initialize OrderContent reference
             LoadCategories();
             LoadProductsByCategory(-1); // Load all products by default
         }
@@ -313,6 +314,7 @@ namespace FinalProject.Components
             MessageBox.Show("Order committed successfully!", "Order Confirmation");
             orderedProducts.Clear();
             RefreshOrderList();
+            orderContent.ReloadOrders(); // Reload orders in OrderContent
             panel2.Controls.Clear();
             panel2.Controls.Add(orderListPanel);
             panel2.Controls.Add(panel8);
