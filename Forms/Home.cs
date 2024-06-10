@@ -1,8 +1,6 @@
-﻿using System;
-using System.Drawing;
+﻿using FinalProject.Components;
+using FinalProject.Components.Common;
 using System.Windows.Forms;
-using FinalProject.Components;
-using FinalProject.Components.Common; // Thêm namespace cho Search
 
 namespace FinalProject.Forms
 {
@@ -13,13 +11,20 @@ namespace FinalProject.Forms
         private OrderContent orderContent;
         private Search searchComponent; // Khai báo searchComponent ở đây
         private UserControl currentContent; // Khai báo biến currentContent
+        private int EmployeeID { get; set; }  // Thêm thuộc tính EmployeeID
+        private string UserPosition { get; set; } // Thêm thuộc tính UserPosition
 
-        public Home()
+        public Home(int employeeID, string position) // Thay đổi phương thức khởi tạo để chấp nhận tham số employeeID và position
         {
             InitializeComponent();
+            EmployeeID = employeeID;  // Lưu trữ EmployeeID
+            UserPosition = position; // Lưu trữ UserPosition
             orderContent = new OrderContent(); // Initialize OrderContent first
-            homeContent = new HomeContent(orderContent); // Pass orderContent to HomeContent constructor
+            homeContent = new HomeContent(orderContent, EmployeeID); // Truyền EmployeeID vào HomeContent
             employeeContent = new EmployeeContent();
+
+            // Khởi tạo close_minmize và truyền form hiện tại
+            closeMinimize.SetTargetForm(this);
 
             // Khởi tạo searchComponent với hàm xử lý và hint text
             searchComponent = new Search(HomeContentSearch, "Search products...");
@@ -110,7 +115,14 @@ namespace FinalProject.Forms
 
         private void button6_Click_1(object sender, EventArgs e)
         {
-            ShowContent(employeeContent);
+            if (UserPosition == "Manager") // Kiểm tra vai trò người dùng
+            {
+                ShowContent(new EmployeeContent()); // Hiển thị nội dung Cashier nếu người dùng là Manager
+            }
+            else
+            {
+                MessageBox.Show("You do not have permission to access this section.", "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void button7_Click_1(object sender, EventArgs e)
@@ -129,6 +141,16 @@ namespace FinalProject.Forms
 
         private void panel7_Paint(object sender, PaintEventArgs e)
         {
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            // Hiển thị form đăng nhập
+            Login loginForm = new Login();
+            loginForm.Show();
+
+            // Đóng form Home
+            this.Close();
         }
     }
 }

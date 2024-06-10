@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using FinalProject.Controllers;
+﻿using FinalProject.Controllers;
 using FinalProject.Models;
 
 namespace FinalProject.Components
@@ -13,10 +9,12 @@ namespace FinalProject.Components
         private ProductController productController;
         private Dictionary<int, int> orderedProducts; // ProductID, Quantity
         private OrderContent orderContent; // Reference to OrderContent
+        private int EmployeeID { get; set; }  // Thêm thuộc tính EmployeeID
 
-        public HomeContent(OrderContent orderContent)
+        public HomeContent(OrderContent orderContent, int employeeID)
         {
             InitializeComponent();
+            EmployeeID = employeeID;  // Lưu trữ EmployeeID
             categoryController = new CategoryController();
             productController = new ProductController();
             orderedProducts = new Dictionary<int, int>();
@@ -286,7 +284,7 @@ namespace FinalProject.Components
 
         private void DisplayBill()
         {
-            BillDisplay billDisplay = new BillDisplay();
+            BillDisplay billDisplay = new BillDisplay(EmployeeID); // Truyền EmployeeID khi tạo BillDisplay
             billDisplay.Dock = DockStyle.Fill;
             panel2.Controls.Clear();
             panel2.Controls.Add(billDisplay);

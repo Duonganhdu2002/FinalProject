@@ -5,7 +5,7 @@
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Label labelEmployeeName;
         private System.Windows.Forms.Panel panelContent;
-        // private FinalProject.Components.Common.Search searchComponent; // Loại bỏ khai báo này
+        private FinalProject.Components.Common.close_minmize closeMinimize; // Thêm dòng này
 
         protected override void Dispose(bool disposing)
         {
@@ -35,6 +35,7 @@
             flowLayoutPanel2 = new FlowLayoutPanel();
             panelContent = new Panel();
             panel9 = new Panel();
+            closeMinimize = new FinalProject.Components.Common.close_minmize(); // Thêm dòng này
             label1 = new Label();
             panel1.SuspendLayout();
             panel7.SuspendLayout();
@@ -90,6 +91,7 @@
             button9.Text = "Log out";
             button9.TextAlign = ContentAlignment.BottomCenter;
             button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
             // 
             // panel3
             // 
@@ -215,6 +217,7 @@
             // panel9
             // 
             panel9.BackColor = Color.White;
+            panel9.Controls.Add(closeMinimize); // Thêm dòng này
             panel9.Controls.Add(label1);
             panel9.Dock = DockStyle.Top;
             panel9.Location = new Point(0, 0);
@@ -222,6 +225,11 @@
             panel9.Size = new Size(1105, 50);
             panel9.TabIndex = 7;
             panel9.Paint += panel9_Paint;
+            // 
+            // closeMinimize
+            // 
+            closeMinimize.Dock = DockStyle.Right; // Đặt vị trí bên phải
+            closeMinimize.SetTargetForm(this); // Truyền form hiện tại vào close_minmize
             // 
             // label1
             // 

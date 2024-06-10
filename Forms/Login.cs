@@ -1,7 +1,7 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using FinalProject.Components.Common;
 using FinalProject.Controllers;
 using FinalProject.Models;
+using System.Windows.Forms;
 
 namespace FinalProject.Forms
 {
@@ -13,6 +13,9 @@ namespace FinalProject.Forms
         {
             InitializeComponent();
             employeeController = new EmployeeController();
+
+            // Khởi tạo close_minmize và truyền form hiện tại
+            closeMinimize.SetTargetForm(this);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -23,7 +26,7 @@ namespace FinalProject.Forms
             Employee? employee = employeeController.ValidateUser(email, password);
             if (employee != null)
             {
-                Home homeForm = new Home();
+                Home homeForm = new Home(employee.EmployeeID, employee.Position);  // Truyền EmployeeID và Position khi tạo đối tượng Home
                 homeForm.Show();
                 this.Hide();
             }
