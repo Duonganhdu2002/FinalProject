@@ -78,7 +78,17 @@ namespace FinalProject.Controllers
                 cmd.Parameters.AddWithValue("@Description", product.Description);
                 cmd.Parameters.AddWithValue("@Price", product.Price);
                 cmd.Parameters.AddWithValue("@StockQuantity", product.StockQuantity);
-                cmd.Parameters.AddWithValue("@ImagePath", product.ImagePath);
+
+                // Handle ImagePath for possible null value
+                if (product.ImagePath != null)
+                {
+                    cmd.Parameters.AddWithValue("@ImagePath", product.ImagePath);
+                }
+                else
+                {
+                    cmd.Parameters.AddWithValue("@ImagePath", DBNull.Value);
+                }
+
                 cmd.Parameters.AddWithValue("@CategoryID", product.CategoryID);
 
                 dbConnection.OpenConnection();
@@ -87,6 +97,7 @@ namespace FinalProject.Controllers
             }
             products.Add(product);
         }
+
 
         public void UpdateProduct(Product product)
         {

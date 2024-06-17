@@ -18,6 +18,7 @@
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             labelEmployeeName = new Label();
             panel1 = new Panel();
@@ -35,8 +36,10 @@
             flowLayoutPanel2 = new FlowLayoutPanel();
             panelContent = new Panel();
             panel9 = new Panel();
-            closeMinimize = new FinalProject.Components.Common.close_minmize(); // Thêm dòng này
+            closeMinimize = new Components.Common.close_minmize(components);
             label1 = new Label();
+            product_btn = new Button();
+            panel4 = new Panel();
             panel1.SuspendLayout();
             panel7.SuspendLayout();
             panel3.SuspendLayout();
@@ -45,6 +48,7 @@
             panel2.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             panel9.SuspendLayout();
+            panel4.SuspendLayout();
             SuspendLayout();
             // 
             // labelEmployeeName
@@ -59,6 +63,7 @@
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panel1.BackColor = Color.White;
+            panel1.Controls.Add(panel4);
             panel1.Controls.Add(panel7);
             panel1.Controls.Add(panel3);
             panel1.Controls.Add(panel6);
@@ -107,7 +112,7 @@
             button2.Font = new Font("#9Slide03 Cabin", 8.999999F);
             button2.ForeColor = Color.DimGray;
             button2.Image = (Image)resources.GetObject("button2.Image");
-            button2.Location = new Point(-16, -11);
+            button2.Location = new Point(-16, -12);
             button2.Name = "button2";
             button2.Size = new Size(104, 83);
             button2.TabIndex = 4;
@@ -217,7 +222,7 @@
             // panel9
             // 
             panel9.BackColor = Color.White;
-            panel9.Controls.Add(closeMinimize); // Thêm dòng này
+            panel9.Controls.Add(closeMinimize);
             panel9.Controls.Add(label1);
             panel9.Dock = DockStyle.Top;
             panel9.Location = new Point(0, 0);
@@ -228,8 +233,11 @@
             // 
             // closeMinimize
             // 
-            closeMinimize.Dock = DockStyle.Right; // Đặt vị trí bên phải
-            closeMinimize.SetTargetForm(this); // Truyền form hiện tại vào close_minmize
+            closeMinimize.Dock = DockStyle.Right;
+            closeMinimize.Location = new Point(935, 0);
+            closeMinimize.Name = "closeMinimize";
+            closeMinimize.Size = new Size(170, 50);
+            closeMinimize.TabIndex = 0;
             // 
             // label1
             // 
@@ -242,6 +250,28 @@
             label1.TabIndex = 1;
             label1.Text = "RESTRO POS";
             label1.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // product_btn
+            // 
+            product_btn.Font = new Font("#9Slide03 Cabin", 8.999999F);
+            product_btn.ForeColor = Color.DimGray;
+            product_btn.Image = (Image)resources.GetObject("product_btn.Image");
+            product_btn.Location = new Point(-17, -8);
+            product_btn.Name = "product_btn";
+            product_btn.Size = new Size(104, 83);
+            product_btn.TabIndex = 5;
+            product_btn.Text = "Product";
+            product_btn.TextAlign = ContentAlignment.BottomCenter;
+            product_btn.UseVisualStyleBackColor = true;
+            product_btn.Click += product_btn_Click;
+            // 
+            // panel4
+            // 
+            panel4.Controls.Add(product_btn);
+            panel4.Location = new Point(1, 279);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(70, 70);
+            panel4.TabIndex = 8;
             // 
             // Home
             // 
@@ -268,6 +298,7 @@
             flowLayoutPanel2.ResumeLayout(false);
             panel9.ResumeLayout(false);
             panel9.PerformLayout();
+            panel4.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -287,5 +318,7 @@
         private Panel panel9;
         private Label label1;
         private Panel panel7;
+        private Panel panel4;
+        private Button product_btn;
     }
 }

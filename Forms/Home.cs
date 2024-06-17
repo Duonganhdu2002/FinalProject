@@ -152,5 +152,10 @@ namespace FinalProject.Forms
             // Đóng form Home
             this.Close();
         }
+
+        private void product_btn_Click(object sender, EventArgs e)
+        {
+            ShowContent(new ProductContent());
+        }
     }
 }
