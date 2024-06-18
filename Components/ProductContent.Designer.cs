@@ -13,6 +13,7 @@
         private TextBox textBoxDescription;
         private TextBox textBoxPrice;
         private TextBox textBoxStockQuantity;
+        private ComboBox comboBoxCategory;
         private TextBox textBoxEditName;
         private TextBox textBoxEditDescription;
         private TextBox textBoxEditPrice;
@@ -21,7 +22,9 @@
         private Button buttonAddProduct;
         private Button buttonSaveEdit;
         private Button buttonSelectImage;
+        private Button buttonEditSelectImage; // Thêm nút chọn hình ảnh để chỉnh sửa
         private PictureBox pictureBoxSelectedImage;
+        private PictureBox pictureBoxEditSelectedImage; // Thêm PictureBox để hiển thị hình ảnh khi chỉnh sửa
         private Label labelName;
         private Label labelDescription;
         private Label labelPrice;
@@ -60,10 +63,13 @@
             labelStockQuantity = new Label();
             textBoxStockQuantity = new TextBox();
             labelCategory = new Label();
+            comboBoxCategory = new ComboBox();
             panel3 = new Panel();
             buttonAddProduct = new Button();
             panelEdit = new Panel();
             panel2 = new Panel();
+            pictureBoxEditSelectedImage = new PictureBox(); // Khởi tạo PictureBox cho chỉnh sửa
+            buttonEditSelectImage = new Button(); // Khởi tạo nút chọn hình ảnh cho chỉnh sửa
             labelEditProduct = new Label();
             labelEditName = new Label();
             textBoxEditName = new TextBox();
@@ -78,10 +84,10 @@
             buttonSaveEdit = new Button();
             panelProductInfo = new Panel();
             gridViewProducts = new DataGridView();
-            comboBoxCategory = new ComboBox();
             rightPanel.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxSelectedImage).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxEditSelectedImage).BeginInit();
             panel3.SuspendLayout();
             panelEdit.SuspendLayout();
             panel2.SuspendLayout();
@@ -125,7 +131,7 @@
             // 
             pictureBoxSelectedImage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             pictureBoxSelectedImage.BorderStyle = BorderStyle.FixedSingle;
-            pictureBoxSelectedImage.Location = new Point(17, 369);
+            pictureBoxSelectedImage.Location = new Point(17, 355);
             pictureBoxSelectedImage.Name = "pictureBoxSelectedImage";
             pictureBoxSelectedImage.Size = new Size(316, 120);
             pictureBoxSelectedImage.SizeMode = PictureBoxSizeMode.Zoom;
@@ -136,9 +142,9 @@
             // 
             buttonSelectImage.BackColor = Color.LightGray;
             buttonSelectImage.FlatStyle = FlatStyle.Flat;
-            buttonSelectImage.Location = new Point(17, 326);
+            buttonSelectImage.Location = new Point(17, 295);
             buttonSelectImage.Name = "buttonSelectImage";
-            buttonSelectImage.Size = new Size(316, 30);
+            buttonSelectImage.Size = new Size(316, 47);
             buttonSelectImage.TabIndex = 1;
             buttonSelectImage.Text = "Select Image";
             buttonSelectImage.UseVisualStyleBackColor = false;
@@ -217,6 +223,13 @@
             labelCategory.TabIndex = 11;
             labelCategory.Text = "Category";
             // 
+            // comboBoxCategory
+            // 
+            comboBoxCategory.Location = new Point(17, 260);
+            comboBoxCategory.Name = "comboBoxCategory";
+            comboBoxCategory.Size = new Size(316, 23);
+            comboBoxCategory.TabIndex = 10;
+            // 
             // panel3
             // 
             panel3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -252,6 +265,8 @@
             // 
             panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel2.BackColor = Color.White;
+            panel2.Controls.Add(pictureBoxEditSelectedImage); // Thêm PictureBox cho chỉnh sửa
+            panel2.Controls.Add(buttonEditSelectImage); // Thêm nút chọn hình ảnh cho chỉnh sửa
             panel2.Controls.Add(labelEditProduct);
             panel2.Controls.Add(labelEditName);
             panel2.Controls.Add(textBoxEditName);
@@ -268,6 +283,29 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(350, 634);
             panel2.TabIndex = 0;
+            // 
+            // pictureBoxEditSelectedImage
+            // 
+            pictureBoxEditSelectedImage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pictureBoxEditSelectedImage.BorderStyle = BorderStyle.FixedSingle;
+            pictureBoxEditSelectedImage.Location = new Point(17, 355);
+            pictureBoxEditSelectedImage.Name = "pictureBoxEditSelectedImage";
+            pictureBoxEditSelectedImage.Size = new Size(316, 120);
+            pictureBoxEditSelectedImage.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBoxEditSelectedImage.TabIndex = 2;
+            pictureBoxEditSelectedImage.TabStop = false;
+            // 
+            // buttonEditSelectImage
+            // 
+            buttonEditSelectImage.BackColor = Color.LightGray;
+            buttonEditSelectImage.FlatStyle = FlatStyle.Flat;
+            buttonEditSelectImage.Location = new Point(17, 295);
+            buttonEditSelectImage.Name = "buttonEditSelectImage";
+            buttonEditSelectImage.Size = new Size(316, 47);
+            buttonEditSelectImage.TabIndex = 1;
+            buttonEditSelectImage.Text = "Select Image";
+            buttonEditSelectImage.UseVisualStyleBackColor = false;
+            buttonEditSelectImage.Click += ButtonEditSelectImage_Click;
             // 
             // labelEditProduct
             // 
@@ -391,13 +429,7 @@
             gridViewProducts.Size = new Size(530, 629);
             gridViewProducts.TabIndex = 0;
             gridViewProducts.CellClick += GridViewProducts_CellClick;
-            // 
-            // comboBoxCategory
-            // 
-            comboBoxCategory.Location = new Point(17, 260);
-            comboBoxCategory.Name = "comboBoxCategory";
-            comboBoxCategory.Size = new Size(316, 23);
-            comboBoxCategory.TabIndex = 10;
+            gridViewProducts.CellContentClick += GridViewProducts_CellContentClick;
             // 
             // ProductContent
             // 
@@ -410,6 +442,7 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxSelectedImage).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxEditSelectedImage).EndInit();
             panel3.ResumeLayout(false);
             panelEdit.ResumeLayout(false);
             panel2.ResumeLayout(false);
@@ -422,6 +455,5 @@
         #endregion
         private Panel panel1;
         private Panel panel3;
-        private ComboBox comboBoxCategory;
     }
 }

@@ -155,7 +155,7 @@ namespace FinalProject.Forms
 
         private void product_btn_Click(object sender, EventArgs e)
         {
-            ShowContent(new ProductContent());
+            ShowContent(new ProductContent(homeContent)); // Truyền HomeContent vào ProductContent
         }
     }
 }

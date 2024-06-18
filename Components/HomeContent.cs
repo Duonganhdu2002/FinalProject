@@ -1,5 +1,11 @@
 ﻿using FinalProject.Controllers;
 using FinalProject.Models;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace FinalProject.Components
 {
@@ -89,10 +95,11 @@ namespace FinalProject.Components
             DisplayProducts(products);
         }
 
-        private void DisplayProducts(List<Product> products)
+        public void DisplayProducts(List<Product> products) // Đổi thành public
         {
             int panelWidth = 163;
             int panelHeight = 252;
+            string imageDirectory = @"C:\Users\Duong\source\repos\POS-window\Images\";
 
             panelProducts.Controls.Clear();
 
@@ -112,24 +119,22 @@ namespace FinalProject.Components
                     SizeMode = PictureBoxSizeMode.StretchImage
                 };
 
-                // Load image from resources
+                // Load image from the images folder
                 try
                 {
-                    string resourceName = System.IO.Path.GetFileNameWithoutExtension(product.ImagePath);
-                    var imageResource = Properties.Resources.ResourceManager.GetObject(resourceName) as Image;
-
-                    if (imageResource != null)
+                    string imagePath = Path.Combine(imageDirectory, product.ImagePath);
+                    if (File.Exists(imagePath))
                     {
-                        productPicture.Image = imageResource;
+                        productPicture.Image = Image.FromFile(imagePath);
                     }
                     else
                     {
-                        Console.WriteLine($"Image not found in resources: {resourceName}");
+                        Console.WriteLine($"Image not found: {imagePath}");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error loading image from resources: {product.ImagePath}. Exception: {ex.Message}");
+                    Console.WriteLine($"Error loading image: {product.ImagePath}. Exception: {ex.Message}");
                 }
 
                 Label productName = new Label

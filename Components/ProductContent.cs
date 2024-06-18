@@ -3,6 +3,8 @@ using FinalProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace FinalProject.Components
@@ -12,47 +14,70 @@ namespace FinalProject.Components
         private ProductController productController;
         private CategoryController categoryController;
         private List<Category> categories;
-        private string selectedImageName; // Hidden field to store the image name
+        private string selectedImageName;
+        private string editSelectedImageName; // Biến cho tên hình ảnh khi chỉnh sửa
+        private HomeContent homeContent;
 
-        public ProductContent()
+        public ProductContent(HomeContent homeContent)
         {
             InitializeComponent();
+            this.homeContent = homeContent;
             productController = new ProductController();
             categoryController = new CategoryController();
             LoadProductData();
             LoadCategories();
+
+            gridViewProducts.DataError += GridViewProducts_DataError;
+        }
+
+        private void GridViewProducts_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show($"Error: {e.Exception.Message}", "Data Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            e.ThrowException = false;
         }
 
         private void LoadProductData()
         {
             List<Product> products = productController.GetAllProducts();
-            gridViewProducts.DataSource = products;
-            gridViewProducts.CellClick += GridViewProducts_CellClick;
+            gridViewProducts.DataSource = null; // Reset the DataSource to avoid conflicts
+            gridViewProducts.Columns.Clear(); // Clear existing columns
 
-            // Configure DataGridView columns
-            gridViewProducts.AutoGenerateColumns = false;
-            gridViewProducts.Columns.Clear();
-
-            // Add necessary columns
-            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "ID", DataPropertyName = "ProductID" });
-            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Name", DataPropertyName = "Name" });
-            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Description", DataPropertyName = "Description" });
-            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Price", DataPropertyName = "Price" });
-            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Stock Quantity", DataPropertyName = "StockQuantity" });
-            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Category", DataPropertyName = "CategoryID" });
-            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Image", DataPropertyName = "ImagePath" });
-
-            // Add delete button column
-            var deleteButtonColumn = new DataGridViewButtonColumn
+            // Add the ProductID column if it doesn't already exist
+            if (!gridViewProducts.Columns.Contains("ProductID"))
             {
-                HeaderText = "Actions",
-                Text = "Delete",
-                UseColumnTextForButtonValue = true
-            };
-            gridViewProducts.Columns.Add(deleteButtonColumn);
+                DataGridViewTextBoxColumn idColumn = new DataGridViewTextBoxColumn
+                {
+                    Name = "ProductID",
+                    HeaderText = "Product ID",
+                    DataPropertyName = "ProductID",
+                    Visible = false // Hide the column
+                };
+                gridViewProducts.Columns.Add(idColumn);
+            }
+
+            // Set the DataSource
+            gridViewProducts.DataSource = products;
+
+            // Add the delete button column if it doesn't already exist
+            if (!gridViewProducts.Columns.Contains("Actions"))
+            {
+                DataGridViewButtonColumn actionsColumn = new DataGridViewButtonColumn
+                {
+                    Name = "Actions",
+                    HeaderText = "Actions",
+                    Text = "Delete",
+                    UseColumnTextForButtonValue = true
+                };
+                gridViewProducts.Columns.Add(actionsColumn);
+            }
+
+            // Remove the last two columns (Category and OrderDetails) if they exist
+            gridViewProducts.Columns["Category"].Visible = false;
+            gridViewProducts.Columns["OrderDetails"].Visible = false;
 
             gridViewProducts.CellClick += GridViewProducts_CellClick;
             gridViewProducts.CellContentClick += GridViewProducts_CellContentClick;
+            gridViewProducts.CellPainting += GridViewProducts_CellPainting;
         }
 
         private void LoadCategories()
@@ -79,18 +104,57 @@ namespace FinalProject.Components
                     textBoxEditPrice.Text = selectedProduct.Price.ToString();
                     textBoxEditStockQuantity.Text = selectedProduct.StockQuantity.ToString();
                     comboBoxEditCategory.SelectedValue = selectedProduct.CategoryID;
-                    panelEdit.Tag = selectedProduct.ProductID; // Store the product ID in the panel's tag
+                    panelEdit.Tag = selectedProduct.ProductID;
+
+                    // Load image from the Images directory
+                    string imagePath = Path.Combine(@"C:\Users\Duong\source\repos\POS-window\Images\", selectedProduct.ImagePath);
+                    if (File.Exists(imagePath))
+                    {
+                        pictureBoxEditSelectedImage.Image = Image.FromFile(imagePath);
+                        editSelectedImageName = selectedProduct.ImagePath; // Lưu trữ tên hình ảnh khi chỉnh sửa
+                    }
+                    else
+                    {
+                        pictureBoxEditSelectedImage.Image = null;
+                    }
                 }
             }
         }
 
         private void GridViewProducts_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex == gridViewProducts.Columns["Actions"].Index)
+            if (e.RowIndex >= 0 && e.RowIndex < gridViewProducts.Rows.Count && e.ColumnIndex == gridViewProducts.Columns["Actions"].Index)
             {
-                int selectedProductId = Convert.ToInt32(gridViewProducts.Rows[e.RowIndex].Cells["ProductID"].Value);
-                productController.DeleteProduct(selectedProductId);
-                LoadProductData(); // Reload data to update DataGridView
+                if (gridViewProducts.Rows[e.RowIndex].Cells["ProductID"].Value != null)
+                {
+                    int selectedProductId = Convert.ToInt32(gridViewProducts.Rows[e.RowIndex].Cells["ProductID"].Value);
+                    var result = MessageBox.Show("Are you sure you want to delete this product?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                        productController.DeleteProduct(selectedProductId);
+                        LoadProductData();
+                        homeContent.DisplayProducts(productController.GetAllProducts()); // Refresh HomeContent
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Unable to retrieve product ID for deletion.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void GridViewProducts_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.ColumnIndex == gridViewProducts.Columns["Actions"].Index && e.RowIndex >= 0)
+            {
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                DataGridViewButtonCell buttonCell = gridViewProducts.Rows[e.RowIndex].Cells["Actions"] as DataGridViewButtonCell;
+                if (buttonCell != null)
+                {
+                    buttonCell.FlatStyle = FlatStyle.Flat;
+                    buttonCell.Style.ForeColor = Color.Red;
+                }
+                e.Handled = true;
             }
         }
 
@@ -119,11 +183,12 @@ namespace FinalProject.Components
                 Price = price,
                 StockQuantity = stockQuantity,
                 CategoryID = selectedCategory.CategoryID,
-                ImagePath = selectedImageName // Set the image name from the hidden field
+                ImagePath = selectedImageName
             };
 
             productController.AddProduct(newProduct);
-            LoadProductData(); // Reload data to update DataGridView
+            LoadProductData();
+            homeContent.DisplayProducts(productController.GetAllProducts()); // Refresh HomeContent
 
             MessageBox.Show("Product added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -157,11 +222,12 @@ namespace FinalProject.Components
                     Price = price,
                     StockQuantity = stockQuantity,
                     CategoryID = selectedCategory.CategoryID,
-                    ImagePath = selectedImageName // Set the image name from the hidden field
+                    ImagePath = editSelectedImageName // Set the image name from the hidden field
                 };
 
                 productController.UpdateProduct(updatedProduct);
-                LoadProductData(); // Reload data to update DataGridView
+                LoadProductData();
+                homeContent.DisplayProducts(productController.GetAllProducts()); // Refresh HomeContent
             }
         }
 
@@ -175,10 +241,38 @@ namespace FinalProject.Components
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string selectedImagePath = openFileDialog.FileName;
-                    pictureBoxSelectedImage.Image = Image.FromFile(selectedImagePath);
+                    string imagesDirectory = @"C:\Users\Duong\source\repos\POS-window\Images\";
+                    string newImagePath = Path.Combine(imagesDirectory, Path.GetFileName(selectedImagePath));
 
-                    // Set the image name in the hidden field
-                    selectedImageName = System.IO.Path.GetFileName(selectedImagePath);
+                    // Copy the selected image to the target directory
+                    File.Copy(selectedImagePath, newImagePath, true);
+
+                    pictureBoxSelectedImage.Image = Image.FromFile(newImagePath);
+
+                    selectedImageName = Path.GetFileName(newImagePath); // Store the image name
+                }
+            }
+        }
+
+        private void ButtonEditSelectImage_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp";
+                openFileDialog.Title = "Select a Product Image";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedImagePath = openFileDialog.FileName;
+                    string imagesDirectory = @"C:\Users\Duong\source\repos\POS-window\Images\";
+                    string newImagePath = Path.Combine(imagesDirectory, Path.GetFileName(selectedImagePath));
+
+                    // Copy the selected image to the target directory
+                    File.Copy(selectedImagePath, newImagePath, true);
+
+                    pictureBoxEditSelectedImage.Image = Image.FromFile(newImagePath);
+
+                    editSelectedImageName = Path.GetFileName(newImagePath); // Store the image name for editing
                 }
             }
         }
