@@ -12,6 +12,7 @@ namespace FinalProject.Components
         private ProductController productController;
         private CategoryController categoryController;
         private List<Category> categories;
+        private string selectedImageName; // Hidden field to store the image name
 
         public ProductContent()
         {
@@ -27,6 +28,31 @@ namespace FinalProject.Components
             List<Product> products = productController.GetAllProducts();
             gridViewProducts.DataSource = products;
             gridViewProducts.CellClick += GridViewProducts_CellClick;
+
+            // Configure DataGridView columns
+            gridViewProducts.AutoGenerateColumns = false;
+            gridViewProducts.Columns.Clear();
+
+            // Add necessary columns
+            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "ID", DataPropertyName = "ProductID" });
+            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Name", DataPropertyName = "Name" });
+            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Description", DataPropertyName = "Description" });
+            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Price", DataPropertyName = "Price" });
+            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Stock Quantity", DataPropertyName = "StockQuantity" });
+            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Category", DataPropertyName = "CategoryID" });
+            gridViewProducts.Columns.Add(new DataGridViewTextBoxColumn { HeaderText = "Image", DataPropertyName = "ImagePath" });
+
+            // Add delete button column
+            var deleteButtonColumn = new DataGridViewButtonColumn
+            {
+                HeaderText = "Actions",
+                Text = "Delete",
+                UseColumnTextForButtonValue = true
+            };
+            gridViewProducts.Columns.Add(deleteButtonColumn);
+
+            gridViewProducts.CellClick += GridViewProducts_CellClick;
+            gridViewProducts.CellContentClick += GridViewProducts_CellContentClick;
         }
 
         private void LoadCategories()
@@ -42,9 +68,9 @@ namespace FinalProject.Components
 
         private void GridViewProducts_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && e.ColumnIndex != gridViewProducts.Columns["Actions"].Index)
             {
-                int selectedProductId = Convert.ToInt32(gridViewProducts.Rows[e.RowIndex].Cells[0].Value);
+                int selectedProductId = Convert.ToInt32(gridViewProducts.Rows[e.RowIndex].Cells["ProductID"].Value);
                 Product selectedProduct = productController.GetProductById(selectedProductId);
                 if (selectedProduct != null)
                 {
@@ -55,6 +81,16 @@ namespace FinalProject.Components
                     comboBoxEditCategory.SelectedValue = selectedProduct.CategoryID;
                     panelEdit.Tag = selectedProduct.ProductID; // Store the product ID in the panel's tag
                 }
+            }
+        }
+
+        private void GridViewProducts_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == gridViewProducts.Columns["Actions"].Index)
+            {
+                int selectedProductId = Convert.ToInt32(gridViewProducts.Rows[e.RowIndex].Cells["ProductID"].Value);
+                productController.DeleteProduct(selectedProductId);
+                LoadProductData(); // Reload data to update DataGridView
             }
         }
 
@@ -82,27 +118,15 @@ namespace FinalProject.Components
                 Description = textBoxDescription.Text,
                 Price = price,
                 StockQuantity = stockQuantity,
-                CategoryID = selectedCategory.CategoryID
+                CategoryID = selectedCategory.CategoryID,
+                ImagePath = selectedImageName // Set the image name from the hidden field
             };
 
-            // Handle image path selection
-            if (pictureBoxSelectedImage.Image != null)
-            {
-                // Assuming you have a way to store the image path in newProduct.ImagePath
-                // For example, you could store the path to where the image is saved.
-                // Replace "path_to_image_folder" with your actual path logic.
-                string imagePath = "C://Users//Duong//Source//Repos//POS-window//Images//"; // Replace with your logic to save image
-
-                // Set newProduct.ImagePath to imagePath
-                newProduct.ImagePath = imagePath;
-            }
-
             productController.AddProduct(newProduct);
-            LoadProductData();
+            LoadProductData(); // Reload data to update DataGridView
 
             MessageBox.Show("Product added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
 
         private void ButtonSaveEdit_Click(object sender, EventArgs e)
         {
@@ -132,11 +156,12 @@ namespace FinalProject.Components
                     Description = textBoxEditDescription.Text,
                     Price = price,
                     StockQuantity = stockQuantity,
-                    CategoryID = selectedCategory.CategoryID
+                    CategoryID = selectedCategory.CategoryID,
+                    ImagePath = selectedImageName // Set the image name from the hidden field
                 };
 
                 productController.UpdateProduct(updatedProduct);
-                LoadProductData();
+                LoadProductData(); // Reload data to update DataGridView
             }
         }
 
@@ -151,6 +176,9 @@ namespace FinalProject.Components
                 {
                     string selectedImagePath = openFileDialog.FileName;
                     pictureBoxSelectedImage.Image = Image.FromFile(selectedImagePath);
+
+                    // Set the image name in the hidden field
+                    selectedImageName = System.IO.Path.GetFileName(selectedImagePath);
                 }
             }
         }

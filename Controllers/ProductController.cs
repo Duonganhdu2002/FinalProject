@@ -98,7 +98,6 @@ namespace FinalProject.Controllers
             products.Add(product);
         }
 
-
         public void UpdateProduct(Product product)
         {
             var existingProduct = GetProductById(product.ProductID);

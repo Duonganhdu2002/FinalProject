@@ -13,7 +13,6 @@
         private TextBox textBoxDescription;
         private TextBox textBoxPrice;
         private TextBox textBoxStockQuantity;
-        private ComboBox comboBoxCategory;
         private TextBox textBoxEditName;
         private TextBox textBoxEditDescription;
         private TextBox textBoxEditPrice;
@@ -50,6 +49,8 @@
         {
             rightPanel = new Panel();
             panel1 = new Panel();
+            pictureBoxSelectedImage = new PictureBox();
+            buttonSelectImage = new Button();
             labelName = new Label();
             textBoxName = new TextBox();
             labelDescription = new Label();
@@ -59,10 +60,7 @@
             labelStockQuantity = new Label();
             textBoxStockQuantity = new TextBox();
             labelCategory = new Label();
-            comboBoxCategory = new ComboBox();
             panel3 = new Panel();
-            buttonSelectImage = new Button();
-            pictureBoxSelectedImage = new PictureBox();
             buttonAddProduct = new Button();
             panelEdit = new Panel();
             panel2 = new Panel();
@@ -80,10 +78,11 @@
             buttonSaveEdit = new Button();
             panelProductInfo = new Panel();
             gridViewProducts = new DataGridView();
+            comboBoxCategory = new ComboBox();
             rightPanel.SuspendLayout();
             panel1.SuspendLayout();
-            panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxSelectedImage).BeginInit();
+            panel3.SuspendLayout();
             panelEdit.SuspendLayout();
             panel2.SuspendLayout();
             panelProductInfo.SuspendLayout();
@@ -104,6 +103,8 @@
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             panel1.BackColor = Color.White;
+            panel1.Controls.Add(pictureBoxSelectedImage);
+            panel1.Controls.Add(buttonSelectImage);
             panel1.Controls.Add(labelName);
             panel1.Controls.Add(textBoxName);
             panel1.Controls.Add(labelDescription);
@@ -119,6 +120,29 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(350, 634);
             panel1.TabIndex = 0;
+            // 
+            // pictureBoxSelectedImage
+            // 
+            pictureBoxSelectedImage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            pictureBoxSelectedImage.BorderStyle = BorderStyle.FixedSingle;
+            pictureBoxSelectedImage.Location = new Point(17, 369);
+            pictureBoxSelectedImage.Name = "pictureBoxSelectedImage";
+            pictureBoxSelectedImage.Size = new Size(316, 120);
+            pictureBoxSelectedImage.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBoxSelectedImage.TabIndex = 2;
+            pictureBoxSelectedImage.TabStop = false;
+            // 
+            // buttonSelectImage
+            // 
+            buttonSelectImage.BackColor = Color.LightGray;
+            buttonSelectImage.FlatStyle = FlatStyle.Flat;
+            buttonSelectImage.Location = new Point(17, 326);
+            buttonSelectImage.Name = "buttonSelectImage";
+            buttonSelectImage.Size = new Size(316, 30);
+            buttonSelectImage.TabIndex = 1;
+            buttonSelectImage.Text = "Select Image";
+            buttonSelectImage.UseVisualStyleBackColor = false;
+            buttonSelectImage.Click += ButtonSelectImage_Click;
             // 
             // labelName
             // 
@@ -193,52 +217,20 @@
             labelCategory.TabIndex = 11;
             labelCategory.Text = "Category";
             // 
-            // comboBoxCategory
-            // 
-            comboBoxCategory.Location = new Point(17, 260);
-            comboBoxCategory.Name = "comboBoxCategory";
-            comboBoxCategory.Size = new Size(316, 23);
-            comboBoxCategory.TabIndex = 10;
-            // 
             // panel3
             // 
             panel3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panel3.Controls.Add(buttonSelectImage);
-            panel3.Controls.Add(pictureBoxSelectedImage);
             panel3.Controls.Add(buttonAddProduct);
-            panel3.Location = new Point(17, 370);
+            panel3.Location = new Point(17, 538);
             panel3.Name = "panel3";
-            panel3.Size = new Size(316, 215);
+            panel3.Size = new Size(316, 47);
             panel3.TabIndex = 1;
-            // 
-            // buttonSelectImage
-            // 
-            buttonSelectImage.BackColor = Color.LightGray;
-            buttonSelectImage.FlatStyle = FlatStyle.Flat;
-            buttonSelectImage.Location = new Point(0, 0);
-            buttonSelectImage.Name = "buttonSelectImage";
-            buttonSelectImage.Size = new Size(316, 47);
-            buttonSelectImage.TabIndex = 1;
-            buttonSelectImage.Text = "Select Image";
-            buttonSelectImage.UseVisualStyleBackColor = false;
-            buttonSelectImage.Click += ButtonSelectImage_Click;
-            // 
-            // pictureBoxSelectedImage
-            // 
-            pictureBoxSelectedImage.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pictureBoxSelectedImage.BorderStyle = BorderStyle.FixedSingle;
-            pictureBoxSelectedImage.Location = new Point(0, 50);
-            pictureBoxSelectedImage.Name = "pictureBoxSelectedImage";
-            pictureBoxSelectedImage.Size = new Size(316, 120);
-            pictureBoxSelectedImage.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBoxSelectedImage.TabIndex = 2;
-            pictureBoxSelectedImage.TabStop = false;
             // 
             // buttonAddProduct
             // 
             buttonAddProduct.BackColor = Color.LightGray;
             buttonAddProduct.FlatStyle = FlatStyle.Flat;
-            buttonAddProduct.Location = new Point(0, 180);
+            buttonAddProduct.Location = new Point(0, 0);
             buttonAddProduct.Name = "buttonAddProduct";
             buttonAddProduct.Size = new Size(316, 47);
             buttonAddProduct.TabIndex = 0;
@@ -380,7 +372,7 @@
             // 
             // panelProductInfo
             // 
-            panelProductInfo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            panelProductInfo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panelProductInfo.BackColor = SystemColors.Control;
             panelProductInfo.Controls.Add(gridViewProducts);
             panelProductInfo.Location = new Point(0, 0);
@@ -400,6 +392,13 @@
             gridViewProducts.TabIndex = 0;
             gridViewProducts.CellClick += GridViewProducts_CellClick;
             // 
+            // comboBoxCategory
+            // 
+            comboBoxCategory.Location = new Point(17, 260);
+            comboBoxCategory.Name = "comboBoxCategory";
+            comboBoxCategory.Size = new Size(316, 23);
+            comboBoxCategory.TabIndex = 10;
+            // 
             // ProductContent
             // 
             Controls.Add(panelEdit);
@@ -410,8 +409,8 @@
             rightPanel.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxSelectedImage).EndInit();
+            panel3.ResumeLayout(false);
             panelEdit.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
@@ -423,5 +422,6 @@
         #endregion
         private Panel panel1;
         private Panel panel3;
+        private ComboBox comboBoxCategory;
     }
 }
