@@ -161,10 +161,10 @@ namespace FinalProject.Components
             List<Order> orders = orderController.SearchOrders(searchText);
             dataGridViewOrders.DataSource = orders;
         }
+
         public void ReloadOrders()
         {
             LoadOrders();
         }
-
     }
 }

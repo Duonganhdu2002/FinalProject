@@ -1,5 +1,10 @@
 ﻿using FinalProject.Controllers;
 using FinalProject.Models;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace FinalProject.Components
 {
@@ -11,11 +16,13 @@ namespace FinalProject.Components
         private OrderDetailController orderDetailController;
         private ToolTip toolTip;
         private int EmployeeID { get; set; }  // Thêm thuộc tính EmployeeID
+        private OrderContent orderContent; // Thêm thuộc tính OrderContent
 
-        public BillDisplay(int employeeID) // Thêm tham số employeeID
+        public BillDisplay(int employeeID, OrderContent orderContent) // Thêm tham số orderContent
         {
             InitializeComponent();
             EmployeeID = employeeID;  // Lưu trữ EmployeeID
+            this.orderContent = orderContent; // Lưu trữ OrderContent
             currentOrderDetails = new List<OrderDetail>();
             orderController = new OrderController();
             orderDetailController = new OrderDetailController();
@@ -111,7 +118,7 @@ namespace FinalProject.Components
                 foreach (var detail in currentOrderDetails)
                 {
                     detail.OrderID = currentOrder.OrderID; // Set the OrderID of each detail
-                    orderDetailController.AddOrderDetail(detail); // Uncomment this line to add order detail
+                    orderDetailController.AddOrderDetail(detail);
                 }
 
                 ShowToolTip(button1, "Order committed successfully!");
@@ -120,6 +127,9 @@ namespace FinalProject.Components
                 currentOrderDetails.Clear();
                 thisPanelDisplayProductDetail.Controls.Clear();
                 totalPriceOfBill.Text = "0$";
+
+                // Reload orders in OrderContent
+                orderContent.ReloadOrders();
             }
             else
             {

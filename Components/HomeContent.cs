@@ -289,7 +289,7 @@ namespace FinalProject.Components
 
         private void DisplayBill()
         {
-            BillDisplay billDisplay = new BillDisplay(EmployeeID); // Truyền EmployeeID khi tạo BillDisplay
+            BillDisplay billDisplay = new BillDisplay(EmployeeID, orderContent); // Truyền EmployeeID và OrderContent khi tạo BillDisplay
             billDisplay.Dock = DockStyle.Fill;
             panel2.Controls.Clear();
             panel2.Controls.Add(billDisplay);
